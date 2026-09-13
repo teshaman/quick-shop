@@ -1,0 +1,20 @@
+{
+  "name": "quick-shop-mcp",
+  "version": "0.2.0",
+  "private": true,
+  "description": "MCP server that lets Claude Code drive the Quick Shop Foundry VTT module.",
+  "type": "module",
+  "main": "server.mjs",
+  "bin": { "quick-shop-mcp": "server.mjs" },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node test/smoke.mjs",
+    "zip": "node build-zip.mjs"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ws": "^8.21.0",
+    "zod": "^3.25.0"
+  }
+}

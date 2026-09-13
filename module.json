@@ -1,0 +1,17 @@
+{
+  "id": "quick-shop",
+  "title": "Quick Shop",
+  "description": "GM-run shops for dnd5e: generate stock from compendiums, open or close the shop, let players browse and buy with automatic gold deduction, and haggle with a skill check.",
+  "version": "0.2.0",
+  "manifest": "https://github.com/teshaman/quick-shop/releases/latest/download/module.json",
+  "download": "https://github.com/teshaman/quick-shop/releases/download/0.2.0/module.zip",
+  "authors": [{ "name": "alexg" }],
+  "compatibility": { "minimum": "13", "verified": "14" },
+  "relationships": {
+    "systems": [{ "id": "dnd5e", "type": "system", "compatibility": { "minimum": "4.0.0" } }]
+  },
+  "esmodules": ["scripts/main.mjs"],
+  "styles": ["styles/quick-shop.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "socket": true
+}

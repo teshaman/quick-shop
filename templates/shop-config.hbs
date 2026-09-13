@@ -1,0 +1,202 @@
+<div class="part-root">
+<header class="shop-header">
+  <img class="shop-portrait" src="{{img}}" alt="">
+  <div class="shop-title">
+    <h2>{{#if name}}{{name}}{{else}}{{actorName}}{{/if}}</h2>
+    <span class="status {{#if open}}open{{else}}closed{{/if}}">
+      <i class="fa-solid {{#if open}}fa-door-open{{else}}fa-door-closed{{/if}}"></i>
+      {{#if open}}{{localize "QUICKSHOP.Browser.Open"}}{{else}}{{localize "QUICKSHOP.Browser.Closed"}}{{/if}}
+    </span>
+  </div>
+  <div class="gm-tools">
+    <button type="button" data-action="preview" data-tooltip="QUICKSHOP.Config.Preview"><i class="fa-solid fa-eye"></i></button>
+    <button type="button" data-action="showPlayers" data-tooltip="QUICKSHOP.Browser.ShowPlayers"><i class="fa-solid fa-users"></i></button>
+    <button type="button" data-action="openSheet" data-tooltip="QUICKSHOP.Browser.OpenSheet"><i class="fa-solid fa-user"></i></button>
+  </div>
+</header>
+
+<div class="config-body">
+
+  <fieldset>
+    <legend>{{localize "QUICKSHOP.Config.General"}}</legend>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Name"}}</label>
+      <div class="form-fields">
+        <input type="text" name="name" value="{{name}}" placeholder="{{actorName}}">
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.NameHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Open"}}</label>
+      <div class="form-fields">
+        <input type="checkbox" name="open" {{#if open}}checked{{/if}}>
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.OpenHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Markup"}}</label>
+      <div class="form-fields">
+        <input type="number" name="markup" value="{{markup}}" min="0" step="1"> <span>%</span>
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.MarkupHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Unlimited"}}</label>
+      <div class="form-fields">
+        <input type="checkbox" name="unlimited" {{#if unlimited}}checked{{/if}}>
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.UnlimitedHint"}}</p>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "QUICKSHOP.Config.Haggling"}}</legend>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.HaggleEnabled"}}</label>
+      <div class="form-fields"><input type="checkbox" name="haggle.enabled" {{#if haggle.enabled}}checked{{/if}}></div>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.HaggleSkills"}}</label>
+      <div class="form-fields checkbox-row">
+        {{#each haggle.skillOptions}}
+        <label class="checkbox"><input type="checkbox" name="haggle.skills.{{key}}" {{#if checked}}checked{{/if}}> {{label}}</label>
+        {{/each}}
+      </div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.HaggleDC"}}</label>
+      <div class="form-fields"><input type="number" name="haggle.dc" value="{{haggle.dc}}" min="1" step="1"></div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.HaggleDiscount"}}</label>
+      <div class="form-fields"><input type="number" name="haggle.discount" value="{{haggle.discount}}" min="0" step="1"> <span>%</span></div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.HaggleCrit"}}</label>
+      <div class="form-fields"><input type="number" name="haggle.critBonus" value="{{haggle.critBonus}}" min="0" step="1"> <span>%</span></div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.HaggleFail"}}</label>
+      <div class="form-fields"><input type="number" name="haggle.failPenalty" value="{{haggle.failPenalty}}" min="0" step="1"> <span>%</span></div>
+      <p class="hint">{{localize "QUICKSHOP.Config.HaggleFailHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.HaggleOnce"}}</label>
+      <div class="form-fields"><input type="checkbox" name="haggle.oncePerVisit" {{#if haggle.oncePerVisit}}checked{{/if}}></div>
+    </div>
+    {{#if visits.length}}
+    <div class="visits">
+      <ul>
+        {{#each visits}}<li><strong>{{name}}</strong>: {{outcome}} ({{modifier}}%)</li>{{/each}}
+      </ul>
+      <button type="button" data-action="resetHaggles"><i class="fa-solid fa-rotate-left"></i> {{localize "QUICKSHOP.Config.ResetHaggles"}}</button>
+    </div>
+    {{/if}}
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "QUICKSHOP.Config.Generator"}}</legend>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Category"}}</label>
+      <div class="form-fields">
+        <select name="generator.category">
+          {{#each generator.categories}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{localize label}}</option>{{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.Count"}}</label>
+      <div class="form-fields"><input type="number" name="generator.count" value="{{generator.count}}" min="1" step="1"></div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.PriceRange"}}</label>
+      <div class="form-fields">
+        <input type="number" name="generator.minPrice" value="{{generator.minPrice}}" min="0" step="any">
+        <span>–</span>
+        <input type="number" name="generator.maxPrice" value="{{generator.maxPrice}}" min="0" step="any">
+        <span>gp</span>
+      </div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.QuantityRange"}}</label>
+      <div class="form-fields">
+        <input type="number" name="generator.minQty" value="{{generator.minQty}}" min="1" step="1">
+        <span>–</span>
+        <input type="number" name="generator.maxQty" value="{{generator.maxQty}}" min="1" step="1">
+      </div>
+    </div>
+    <div class="form-group slim">
+      <label>{{localize "QUICKSHOP.Config.PriceVariance"}}</label>
+      <div class="form-fields"><input type="number" name="generator.priceVariance" value="{{generator.priceVariance}}" min="0" max="90" step="1"> <span>%</span></div>
+      <p class="hint">{{localize "QUICKSHOP.Config.PriceVarianceHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "QUICKSHOP.Config.Rarities"}}</label>
+      <div class="form-fields checkbox-row">
+        {{#each generator.rarityOptions}}
+        <label class="checkbox"><input type="checkbox" name="generator.rarities.{{key}}" {{#if checked}}checked{{/if}}> {{label}}</label>
+        {{/each}}
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.RaritiesHint"}}</p>
+    </div>
+    <div class="form-group stacked">
+      <label>{{localize "QUICKSHOP.Config.Packs"}}</label>
+      <div class="form-fields">
+        <select name="generator.packs" multiple size="5">
+          {{#each generator.packs}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </div>
+      <p class="hint">{{localize "QUICKSHOP.Config.PacksHint"}}</p>
+    </div>
+    <div class="button-row">
+      <button type="button" data-action="generate" {{#if generating}}disabled{{/if}}>
+        <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "QUICKSHOP.Config.Generate"}}
+      </button>
+      <button type="button" data-action="clearStock">
+        <i class="fa-solid fa-trash"></i> {{localize "QUICKSHOP.Config.ClearStock"}}
+      </button>
+    </div>
+  </fieldset>
+
+  <fieldset class="stock">
+    <legend>{{localize "QUICKSHOP.Config.Stock"}} ({{itemCount}})</legend>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" name="search" value="{{searchQuery}}" placeholder="{{localize 'QUICKSHOP.Config.SearchPlaceholder'}}" autocomplete="off">
+    </div>
+    <ul class="search-results" {{#unless searchResults.length}}hidden{{/unless}}>
+      {{#each searchResults}}
+      <li>
+        <img src="{{img}}" alt="">
+        <span class="name">{{name}}</span>
+        <span class="meta">{{price}} · {{pack}}</span>
+        <button type="button" data-action="addResult" data-uuid="{{uuid}}" data-tooltip="QUICKSHOP.Config.AddItem"><i class="fa-solid fa-plus"></i></button>
+      </li>
+      {{/each}}
+    </ul>
+    <p class="hint">{{localize "QUICKSHOP.Config.StockHint"}}</p>
+    <ol class="stock-list">
+      {{#each items}}
+      <li class="stock-item" data-item-id="{{id}}">
+        <div class="row">
+          <img src="{{img}}" alt="">
+          <div class="info">
+            <span class="name">{{name}}</span>
+            <span class="meta">{{#if rarity}}{{rarity}} · {{/if}}{{localize "QUICKSHOP.Config.Base"}} {{basePrice}}</span>
+          </div>
+          <div class="price"><span class="current">{{salePrice}}</span></div>
+          <input type="number" class="buy-qty" data-stock-qty="{{id}}" value="{{quantity}}" min="0" step="1">
+          <button type="button" class="icon" data-action="removeItem" data-tooltip="QUICKSHOP.Config.Remove"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </li>
+      {{else}}
+      <li class="empty">{{localize "QUICKSHOP.Config.NoStock"}}</li>
+      {{/each}}
+    </ol>
+  </fieldset>
+
+  <div class="danger-row">
+    <button type="button" data-action="unmark"><i class="fa-solid fa-store-slash"></i> {{localize "QUICKSHOP.Config.Unmark"}}</button>
+  </div>
+</div>
+</div>

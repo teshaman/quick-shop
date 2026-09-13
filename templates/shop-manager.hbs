@@ -1,0 +1,35 @@
+<div class="part-root">
+<div class="button-row top">
+  <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "QUICKSHOP.Manager.Create"}}</button>
+  <button type="button" data-action="convert"><i class="fa-solid fa-right-left"></i> {{localize "QUICKSHOP.Manager.Convert"}}</button>
+</div>
+
+<ol class="shop-list">
+  {{#if empty}}
+    <li class="empty">{{localize "QUICKSHOP.Manager.Empty"}}</li>
+  {{/if}}
+  {{#each shops}}
+  <li class="shop-entry" data-actor-id="{{id}}">
+    <img src="{{img}}" alt="" data-action="openSheet">
+    <div class="info">
+      <span class="name">{{name}}</span>
+      <span class="meta">
+        {{#unless (eq name actorName)}}{{actorName}} · {{/unless}}
+        {{count}} {{localize "QUICKSHOP.Browser.Items"}} ·
+        <span class="status {{#if open}}open{{else}}closed{{/if}}">
+          {{#if open}}{{localize "QUICKSHOP.Browser.Open"}}{{else}}{{localize "QUICKSHOP.Browser.Closed"}}{{/if}}
+        </span>
+      </span>
+    </div>
+    <div class="gm-tools">
+      <button type="button" data-action="toggleOpen" data-tooltip="QUICKSHOP.Browser.ToggleOpen">
+        <i class="fa-solid {{#if open}}fa-lock{{else}}fa-lock-open{{/if}}"></i>
+      </button>
+      <button type="button" data-action="browse" data-tooltip="QUICKSHOP.Config.Preview"><i class="fa-solid fa-eye"></i></button>
+      <button type="button" data-action="showPlayers" data-tooltip="QUICKSHOP.Browser.ShowPlayers"><i class="fa-solid fa-users"></i></button>
+      <button type="button" data-action="configure" data-tooltip="QUICKSHOP.Browser.Configure"><i class="fa-solid fa-gear"></i></button>
+    </div>
+  </li>
+  {{/each}}
+</ol>
+</div>

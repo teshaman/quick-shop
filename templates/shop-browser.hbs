@@ -1,0 +1,100 @@
+<div class="part-root">
+<header class="shop-header">
+  <img class="shop-portrait" src="{{img}}" alt="">
+  <div class="shop-title">
+    <h2>{{name}}</h2>
+    <span class="status {{#if open}}open{{else}}closed{{/if}}">
+      <i class="fa-solid {{#if open}}fa-door-open{{else}}fa-door-closed{{/if}}"></i>
+      {{#if open}}{{localize "QUICKSHOP.Browser.Open"}}{{else}}{{localize "QUICKSHOP.Browser.Closed"}}{{/if}}
+    </span>
+  </div>
+  {{#if isGM}}
+  <div class="gm-tools">
+    <button type="button" data-action="toggleOpen" data-tooltip="QUICKSHOP.Browser.ToggleOpen">
+      <i class="fa-solid {{#if open}}fa-lock{{else}}fa-lock-open{{/if}}"></i>
+    </button>
+    <button type="button" data-action="showPlayers" data-tooltip="QUICKSHOP.Browser.ShowPlayers">
+      <i class="fa-solid fa-users"></i>
+    </button>
+    <button type="button" data-action="configure" data-tooltip="QUICKSHOP.Browser.Configure">
+      <i class="fa-solid fa-gear"></i>
+    </button>
+    <button type="button" data-action="openSheet" data-tooltip="QUICKSHOP.Browser.OpenSheet">
+      <i class="fa-solid fa-user"></i>
+    </button>
+  </div>
+  {{/if}}
+</header>
+
+<section class="buyer-bar">
+  {{#if hasBuyers}}
+  <label>
+    <span>{{localize "QUICKSHOP.Browser.Buyer"}}</span>
+    <select name="buyer">
+      {{#each buyers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+    </select>
+  </label>
+  <div class="wealth">
+    <i class="fa-solid fa-coins"></i> {{wealth}}
+  </div>
+  {{else}}
+  <p class="hint">{{localize "QUICKSHOP.Browser.NoBuyers"}}</p>
+  {{/if}}
+
+  {{#if haggle.enabled}}
+  <div class="haggle">
+    {{#if haggle.visit.rolled}}
+      <span class="haggle-result {{#if haggle.visit.modifier}}{{#if (gt haggle.visit.modifier 0)}}good{{else}}bad{{/if}}{{/if}}">
+        <i class="fa-solid fa-comments-dollar"></i> {{haggle.modifierLabel}}
+      </span>
+    {{/if}}
+    {{#if haggle.canRoll}}
+      <select name="skill">
+        {{#each haggle.skills}}<option value="{{key}}" {{#if (eq key ../haggle.skill)}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+      <button type="button" data-action="haggle" data-tooltip="QUICKSHOP.Browser.HaggleHint">
+        <i class="fa-solid fa-dice-d20"></i> {{localize "QUICKSHOP.Browser.Haggle"}}
+      </button>
+    {{/if}}
+    {{#if isGM}}<span class="dc">DC {{haggle.dc}}</span>{{/if}}
+  </div>
+  {{/if}}
+</section>
+
+<section class="search-bar">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="text" name="search" value="{{search}}" placeholder="{{localize 'QUICKSHOP.Browser.Search'}}" autocomplete="off">
+  <span class="count">{{totalStock}} {{localize "QUICKSHOP.Browser.Items"}}</span>
+</section>
+
+<ol class="stock-list">
+  {{#if empty}}
+    <li class="empty">{{localize "QUICKSHOP.Browser.Empty"}}</li>
+  {{/if}}
+  {{#each items}}
+  <li class="stock-item {{#if expanded}}expanded{{/if}}" data-item-id="{{id}}">
+    <div class="row">
+      <img src="{{img}}" alt="" data-action="toggleDetails">
+      <div class="info" data-action="toggleDetails">
+        <span class="name">{{name}}</span>
+        <span class="meta">{{typeLabel}}{{#if rarity}} · {{rarity}}{{/if}}</span>
+      </div>
+      <div class="price {{#if discounted}}{{#if cheaper}}cheaper{{else}}pricier{{/if}}{{/if}}">
+        <span class="current">{{price}}</span>
+        {{#if discounted}}<span class="base">{{basePrice}}</span>{{/if}}
+      </div>
+      <span class="qty" data-tooltip="QUICKSHOP.Browser.InStock">×{{quantity}}</span>
+      {{#if canBuy}}
+      <input type="number" class="buy-qty" data-qty-for="{{id}}" value="1" min="1" max="{{maxQty}}" step="1">
+      <button type="button" class="buy" data-action="buy" data-item-id="{{id}}" {{#unless canAfford}}disabled data-tooltip="QUICKSHOP.Browser.CannotAfford"{{/unless}}>
+        <i class="fa-solid fa-cart-shopping"></i> {{localize "QUICKSHOP.Browser.Buy"}}
+      </button>
+      {{/if}}
+    </div>
+    {{#if expanded}}
+    <div class="details">{{{description}}}</div>
+    {{/if}}
+  </li>
+  {{/each}}
+</ol>
+</div>
